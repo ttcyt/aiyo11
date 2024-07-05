@@ -1,3 +1,5 @@
+import 'package:aiyo11/services/account.dart';
+import 'package:aiyo11/view/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,12 +12,23 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE6CAFB),
       body: Column(
         children: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage(
+                          email: AccountServices.account['email'])));
+            },
+            child: Text('profile'),
+          ),
           SizedBox(
             height: 250,
           ),
@@ -73,7 +86,8 @@ class _MainPageState extends State<MainPage> {
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.check_outlined)),
+                          onPressed: () {},
+                          icon: const Icon(Icons.check_outlined)),
                     ),
                   ),
                 ],
@@ -84,8 +98,10 @@ class _MainPageState extends State<MainPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.arrow_back),
-        onPressed: () async{
-          await _firebaseAuth.signOut().then((value) { Navigator.pop(context);});
+        onPressed: () async {
+          await _firebaseAuth.signOut().then((value) {
+            Navigator.pop(context);
+          });
         },
       ),
     );

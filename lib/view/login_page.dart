@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aiyo11/view/home_page.dart';
 import 'package:aiyo11/services/account.dart';
-
+import 'package:flutter/scheduler.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -17,25 +17,20 @@ class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       AccountServices.fetchAccounts();
-    }
-
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   User? user = _auth.currentUser;
-  //   if(user!= null){
-  //     AccountServices.fetchAccounts();
-  //     Navigator.push(context, MaterialPageRoute(builder: (context)=> MainPage()));
-  //
-  //   }
-  // }
-
+      User? user = _auth.currentUser;
+      if (user != null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MainPage()));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,20 +46,26 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Text(
                   'AIYO',
-                  style: TextStyle(fontFamily: 'merri', fontSize: 35,),
+                  style: TextStyle(
+                    fontFamily: 'merri',
+                    fontSize: 35,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 50,),
+            const SizedBox(
+              height: 50,
+            ),
             TextField(
-              onChanged: (value){email = value;},
+              onChanged: (value) {
+                email = value;
+              },
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 fillColor: Colors.white,
                 focusColor: Colors.white,
                 filled: true,
-                contentPadding:
-                const EdgeInsets.only(top: 20, bottom: 20),
+                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
                 hintText: 'enter your email',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.transparent),
@@ -73,26 +74,27 @@ class _LoginPageState extends State<LoginPage> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
                   borderSide: const BorderSide(color: Colors.transparent),
-
                 ),
               ),
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 15,
+            ),
             TextField(
-              onChanged: (value){password = value;},
+              onChanged: (value) {
+                password = value;
+              },
               textAlign: TextAlign.center,
               obscureText: true,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 focusColor: Colors.white,
-                contentPadding:
-                const EdgeInsets.only(top: 20, bottom: 20),
+                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
                 hintText: 'enter your password',
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
                   borderSide: const BorderSide(color: Colors.transparent),
-
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
@@ -100,20 +102,27 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 15,
+            ),
             TextButton(
               onPressed: () {
-                _auth.signInWithEmailAndPassword(email: email, password: password);
-                Navigator.push(context,MaterialPageRoute(builder: (context)=> ProfilePage(email: email!)));
-
+                _auth.signInWithEmailAndPassword(
+                    email: email, password: password);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(email: email!)));
               },
               child: const Text('Login'),
             ),
-            const SizedBox(height: 10,),
-
+            const SizedBox(
+              height: 10,
+            ),
             TextButton(
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder:(context)=>RegisterPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RegisterPage()));
               },
               child: const Text('Signin'),
             ),

@@ -15,38 +15,117 @@ class _ProfilePageState extends State<ProfilePage> {
   final _firestore = FirebaseFirestore.instance;
   String changedName = '';
   String changedEmail = '';
-  String changedAddress = '';
+  String changedBirthday = '';
+  int changedHeight = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE6CAFB),
       body: Center(
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) {
-                changedEmail = value;
-                print(AccountServices.account['email']);
-              },
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: AccountServices.account['name'],
-                hintStyle: TextStyle(color: Colors.black),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 80,horizontal: 15),
+          child: Column(
+            children: [
+              TextField(
+                onChanged: (value) {
+                  changedName = value;
+                },
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
+                  hintText: AccountServices.account['name'],
+                  hintStyle: TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
                 ),
               ),
-            ),
-            TextField(),
-            TextField(),
-          ],
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                onChanged: (value) {
+                  changedEmail = value;
+                },
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
+                  hintText: AccountServices.account['email'],
+                  hintStyle: TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                onChanged: (value) {
+                  changedBirthday = value;
+                },
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
+                  hintText: AccountServices.account['birthday'],
+                  hintStyle: TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                onChanged: (value) {
+                  changedHeight = int.parse(value);
+                },
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
+                  hintText: AccountServices.account['height'].toString(),
+                  hintStyle: TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              IconButton(onPressed: (){}, icon: Icon(Icons.auto_fix_high))
+            ],
+          ),
         ),
       ),
     );
