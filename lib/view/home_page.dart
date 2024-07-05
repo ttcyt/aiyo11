@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -8,6 +9,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,7 @@ class _MainPageState extends State<MainPage> {
               child: ListView(
                 children: [
                   Padding(
-                    padding:EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
                     child: ListTile(
                       leading: Image.asset('images/yoga.jpg',
                           height: 170, fit: BoxFit.fill),
@@ -42,7 +44,7 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                   Padding(
-                    padding:EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
                     child: ListTile(
                       leading: Image.asset('images/yoga.jpg',
                           height: 170, fit: BoxFit.fill),
@@ -53,7 +55,7 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                   Padding(
-                    padding:EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
                     child: ListTile(
                       leading: Image.asset('images/yoga.jpg',
                           height: 170, fit: BoxFit.fill),
@@ -64,14 +66,14 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                   Padding(
-                    padding:EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
                     child: ListTile(
                       leading: Image.asset('images/yoga.jpg',
                           height: 170, fit: BoxFit.fill),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
-                          onPressed: () {}, icon: Icon(Icons.check_outlined)),
+                          onPressed: () {}, icon: const Icon(Icons.check_outlined)),
                     ),
                   ),
                 ],
@@ -79,6 +81,12 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.arrow_back),
+        onPressed: () async{
+          await _firebaseAuth.signOut().then((value) { Navigator.pop(context);});
+        },
       ),
     );
   }

@@ -1,14 +1,42 @@
+import 'package:aiyo11/view/profile_page.dart';
 import 'package:aiyo11/view/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aiyo11/view/home_page.dart';
+import 'package:aiyo11/services/account.dart';
 
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+      AccountServices.fetchAccounts();
+    }
+
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   User? user = _auth.currentUser;
+  //   if(user!= null){
+  //     AccountServices.fetchAccounts();
+  //     Navigator.push(context, MaterialPageRoute(builder: (context)=> MainPage()));
+  //
+  //   }
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,13 +81,14 @@ class LoginPage extends StatelessWidget {
             TextField(
               onChanged: (value){password = value;},
               textAlign: TextAlign.center,
+              obscureText: true,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 focusColor: Colors.white,
                 contentPadding:
                 const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your email',
+                hintText: 'enter your password',
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
                   borderSide: const BorderSide(color: Colors.transparent),
@@ -75,7 +104,7 @@ class LoginPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 _auth.signInWithEmailAndPassword(email: email, password: password);
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>const MainPage()));
+                Navigator.push(context,MaterialPageRoute(builder: (context)=> ProfilePage(email: email!)));
 
               },
               child: const Text('Login'),
