@@ -17,6 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String changedEmail = '';
   String changedBirthday = '';
   int changedHeight = 0;
+  int changedWeight = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: const Color(0xFFE6CAFB),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 80,horizontal: 15),
+          padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 15),
           child: Column(
             children: [
               TextField(
@@ -123,11 +124,52 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 height: 20,
               ),
-              IconButton(onPressed: (){}, icon: Icon(Icons.auto_fix_high))
+              TextField(
+                onChanged: (value) {
+                  changedWeight = int.parse(value);
+                },
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
+                  hintText: AccountServices.account['height'].toString(),
+                  hintStyle: TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              IconButton(
+                onPressed: () {
+                  final data = _firestore.collection('users').doc(widget.email);
+                  data.update({
+                    'name': changedName,
+                    'email': changedEmail,
+                    'birthday': changedBirthday,
+                    'height': changedHeight,
+                    'weight': changedWeight,
+                  });
+                },
+                icon: Icon(Icons.auto_fix_high),
+              )
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.arrow_back),
+          onPressed: () async {
+            Navigator.pop(context);
+          }),
     );
   }
 }

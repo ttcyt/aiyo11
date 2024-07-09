@@ -109,10 +109,11 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 _auth.signInWithEmailAndPassword(
                     email: email, password: password);
+                AccountServices.fetchAccounts();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ProfilePage(email: email!)));
+                        builder: (context) => MainPage()));
               },
               child: const Text('Login'),
             ),

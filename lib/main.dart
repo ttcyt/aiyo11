@@ -17,7 +17,7 @@ class Aiyo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LineChartPage(),
+      home: LoginPage(),
     );
   }
 }

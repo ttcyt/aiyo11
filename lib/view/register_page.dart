@@ -214,7 +214,6 @@ class RegisterPage extends StatelessWidget {
                     'gender':gender,
                     'height':height,
                     'weight':weight,
-                    'id': id + 1,
                   });
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> MainPage()));
               },

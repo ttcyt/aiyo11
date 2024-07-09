@@ -62,6 +62,29 @@ class _LineChartPageState extends State<LineChartPage> {
                 ),
               ),
             ),
+            Expanded(
+              child: Card(
+                margin: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+                child: Row(
+                  children: [
+                    Text('1'),
+                    TextField(
+                      maxLength: 10,
+                      decoration: InputDecoration(
+                        hintText: 'height',
+                      ),
+                    ),
+                    TextField(
+                      maxLength: 10,
+                      decoration: InputDecoration(
+                          hintText: 'weight'
+                      ),
+                    ),
+                    Text('BMI：')
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

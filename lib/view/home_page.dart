@@ -21,6 +21,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           TextButton(
             onPressed: () {
+              AccountServices.fetchAccounts();
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -48,8 +49,10 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(
+                        Icons.sports,
+                        size: 80,
+                      ),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
@@ -59,8 +62,10 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(
+                        Icons.sports,
+                        size: 80,
+                      ),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
@@ -70,8 +75,10 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(
+                        Icons.sports,
+                        size: 80,
+                      ),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
@@ -81,8 +88,10 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(
+                        Icons.sports,
+                        size: 80,
+                      ),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
