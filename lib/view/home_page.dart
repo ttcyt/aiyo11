@@ -21,6 +21,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           TextButton(
             onPressed: () {
+              AccountServices.fetchAccounts();
               Navigator.push(
                   context,
                   MaterialPageRoute(
