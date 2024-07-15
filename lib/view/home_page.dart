@@ -1,4 +1,6 @@
 import 'package:aiyo11/services/account.dart';
+import 'package:aiyo11/view/linechart_page.dart';
+import 'package:aiyo11/view/login_page.dart';
 import 'package:aiyo11/view/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,7 +33,21 @@ class _MainPageState extends State<MainPage> {
             child: Text('profile'),
           ),
           SizedBox(
-            height: 250,
+            height: 10,
+          ),
+          TextButton(
+            onPressed: () {
+              AccountServices.fetchAccounts();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LinechartPage(
+                          email: AccountServices.account['email'])));
+            },
+            child: Text('lineChartPage'),
+          ),
+          SizedBox(
+            height: 240,
           ),
           Expanded(
             child: Container(
@@ -49,8 +65,7 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(Icons.sports_baseball),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
@@ -60,8 +75,7 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(Icons.sports_baseball),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
@@ -71,8 +85,7 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(Icons.sports_baseball),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
@@ -82,8 +95,7 @@ class _MainPageState extends State<MainPage> {
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: ListTile(
-                      leading: Image.asset('images/yoga.jpg',
-                          height: 170, fit: BoxFit.fill),
+                      leading: Icon(Icons.sports_baseball),
                       title: Text('三角式'),
                       subtitle: Text('statement'),
                       trailing: IconButton(
@@ -101,7 +113,7 @@ class _MainPageState extends State<MainPage> {
         child: const Icon(Icons.arrow_back),
         onPressed: () async {
           await _firebaseAuth.signOut().then((value) {
-            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
           });
         },
       ),

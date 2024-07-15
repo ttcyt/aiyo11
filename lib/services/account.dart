@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:aiyo11/component/bmi.dart';
 class Account{
   int id;
   String name;
@@ -19,22 +20,42 @@ class Account{
 }
 
 class AccountServices{
+  static final _firestore = FirebaseFirestore.instance;
+  static String? email = _fetchEmail();
   static Map<String, dynamic> _account = {};
   static Map<String, dynamic> get account => _account;
+  static Map<String, dynamic> _bmiDatas = {};
+  static Map<String, dynamic> get bmiDatas => _bmiDatas;
+  static List<dynamic> heights = [];
+  static List<dynamic> weights = [];
+  static List<dynamic> dates = [];
+  static List<BMI> bmis = [];
 
   static Future<void> fetchAccounts() async{
-    final _firestore = FirebaseFirestore.instance;
-    String? email = _fetchEmail();
     dynamic source = await _firestore.collection('users').doc(email).get();
     dynamic data = source.data();
     _account = data;
     print(_account['name']);
+
+    dynamic bmiSource = await _firestore.collection('BMIs').doc(email).get();
+    dynamic bmiData = bmiSource.data();
+    _bmiDatas = bmiData;
+    heights = _bmiDatas['heights'];
+    weights = _bmiDatas['weights'];
+    dates = _bmiDatas['dates'];
+    print(dates[0]);
+
   }
 
 
 
-
-
+  static Future<List<BMI>> takeBMIs() async{
+    for(int i = 0 ; i < heights.length; i++){
+      bmis.add(BMI(date:Timestamp.fromMillisecondsSinceEpoch(
+          dates[0]).toDate(), id:i+1 , height: heights[i], weight: weights[i]));
+    }
+    return bmis;
+  }
 
 
   static String? _fetchEmail(){
