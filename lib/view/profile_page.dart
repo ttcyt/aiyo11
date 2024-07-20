@@ -24,6 +24,9 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     AccountServices.fetchAccounts();
+    setState(() {
+
+    });
   }
 
   @override

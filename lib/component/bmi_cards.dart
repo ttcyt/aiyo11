@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-
-
+const TextStyle styleSmall = TextStyle(
+  fontFamily: 'PS',
+  fontSize: 14,
+);
 class BMIcard extends StatefulWidget {
+
+
   BMIcard({
     super.key,
     required this.date,
@@ -9,8 +13,11 @@ class BMIcard extends StatefulWidget {
     required this.weight,
     required this.height,
     required this.bmi,
+    required this.heightChanged,
+    required this.weightChanged,
   });
-
+  ValueChanged<double> heightChanged;
+  ValueChanged<double> weightChanged;
   final DateTime date;
   final int id;
   double height;
@@ -22,6 +29,9 @@ class BMIcard extends StatefulWidget {
 }
 
 class _BMIcardState extends State<BMIcard> {
+  double _height = 0;
+  double _weight = 0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +47,10 @@ class _BMIcardState extends State<BMIcard> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Text('${widget.id}.  ${widget.date.month}/${widget.date.day}'),
+                  child: Text(
+                      '${widget.id}.  ${widget.date.month}/${widget.date.day}',
+                    style: styleSmall,
+                  ),
                 ),
                 const SizedBox(
                   width: 5,
@@ -45,10 +58,14 @@ class _BMIcardState extends State<BMIcard> {
                 Expanded(
                   flex: 2,
                   child: TextField(
-                    onChanged:(value){
-                      widget.height = double.parse(value);
+                    onChanged: (value) {
+                      _height= double.parse(value);
+                      setState(() {});
+                      widget.heightChanged(_height);
+
                     },
                     decoration: InputDecoration(
+                      hintStyle: styleSmall,
                       fillColor: Colors.white,
                       filled: true,
                       hintText: '${widget.height} cm',
@@ -69,10 +86,13 @@ class _BMIcardState extends State<BMIcard> {
                 Expanded(
                   flex: 2,
                   child: TextField(
-                    onChanged: (value){
-                      widget.weight = double.parse(value);
+                    onChanged: (value) {
+                        _weight= double.parse(value);
+                        setState(() {});
+                        widget.weightChanged(_weight);
                     },
                     decoration: InputDecoration(
+                      hintStyle: styleSmall,
                       fillColor: Colors.white,
                       filled: true,
                       hintText: '${widget.weight} kg',
@@ -93,7 +113,9 @@ class _BMIcardState extends State<BMIcard> {
                 Expanded(
                     flex: 2,
                     child: Text(
-                      'BMI: ${widget.bmi}',
+                      'BMI: ${widget.bmi.toStringAsFixed(2)}',
+                      style: styleSmall,
+
                     )),
               ],
             ),
