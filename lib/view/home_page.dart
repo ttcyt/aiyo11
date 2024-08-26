@@ -1,4 +1,5 @@
 import 'package:aiyo11/services/account.dart';
+import 'package:aiyo11/view/camera_page.dart';
 import 'package:aiyo11/view/linechart_page.dart';
 import 'package:aiyo11/view/login_page.dart';
 import 'package:aiyo11/view/profile_page.dart';
@@ -44,6 +45,16 @@ class _MainPageState extends State<MainPage> {
                           email: AccountServices.account['email'])));
             },
             child: Text('lineChartPage'),
+          ),
+          TextButton(
+            onPressed: () {
+              AccountServices.fetchAccounts();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CameraPage()));
+            },
+            child: Text('cameraPage'),
           ),
           SizedBox(
             height: 240,
