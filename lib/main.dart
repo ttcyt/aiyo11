@@ -1,22 +1,71 @@
+import 'package:aiyo11/home_pages/home.dart';
+import 'package:aiyo11/login_pages/on_boarding_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:aiyo11/widget/alarm.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:aiyo11/login_pages/welcome_page.dart';
+import 'package:aiyo11/widget/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aiyo11/firebase_options.dart';
-import 'package:flutter/material.dart';
-import 'view/login_page.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(Aiyo());
+  runApp(const MyApp());
+  final AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-class Aiyo extends StatelessWidget {
-  const Aiyo({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginPage(),
+      title: 'AIYO',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        //primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: OnboardingScreen(),
     );
   }
 }
+
+//
+// import 'package:aiyo11/view/linechart_page.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:aiyo11/firebase_options.dart';
+// import 'package:flutter/material.dart';
+// import 'package:aiyo11/login_pages/login_page.dart';
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(const Aiyo());
+// }
+//
+// class Aiyo extends StatelessWidget {
+//   const Aiyo({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return const MaterialApp(
+//       home: LogInPage(),
+//     );
+//   }
+// }
