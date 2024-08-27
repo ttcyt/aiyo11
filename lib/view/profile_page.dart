@@ -1,4 +1,4 @@
-import 'package:aiyo11/view/home_page.dart';
+import 'package:aiyo11/home_pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiyo11/services/account.dart';
@@ -186,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Icon(Icons.arrow_back),
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MainPage()));
+              context, MaterialPageRoute(builder: (context) => Home()));
         },
       ),
     );

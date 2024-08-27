@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:aiyo/pages/home.dart';
+import 'package:aiyo11/home_pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Fit extends StatefulWidget {
+class FitPage extends StatefulWidget {
   final String img;
   final YogaPose yogaPose;
 
-  const Fit({super.key, required this.img, required this.yogaPose});
+  const FitPage({super.key, required this.img, required this.yogaPose});
 
   @override
-  State<Fit> createState() => _FitState();
+  State<FitPage> createState() => _FitPageState();
 }
 
-class _FitState extends State<Fit> {
+class _FitPageState extends State<FitPage> {
   bool isFavorite = false;
   void initState() {
     super.initState();

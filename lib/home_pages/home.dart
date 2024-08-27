@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'fit_page.dart';
 import 'package:intl/intl.dart'; // 引入 intl 包以格式化日期
-import 'package:aiyo/widget/alarm.dart';
+import 'package:aiyo11/widget/alarm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class YogaPose {
@@ -20,12 +20,12 @@ class YogaPose {
   });
 }
 
-class UserHome extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
-  _UserHomeState createState() => _UserHomeState();
+  _HomeState createState() => _HomeState();
 }
 
-class _UserHomeState extends State<UserHome> {
+class _HomeState extends State<Home> {
   final List<YogaPose> yogaPoses = [
     YogaPose(
       cname: "三角式",
@@ -272,7 +272,7 @@ class _UserHomeState extends State<UserHome> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Fit(
+                                builder: (context) => FitPage(
                                   img: filteredList[index].imageName,
                                   yogaPose: filteredList[index],
                                 ),
@@ -290,9 +290,8 @@ class _UserHomeState extends State<UserHome> {
                               Padding(
                                 padding: EdgeInsets.all(10),
                                 child: Image.asset(
-                                  'images/${filteredList[index].imageName}.png',
-                                  width: 100,
-                                  height: 100,
+                                  'asset/images/${filteredList[index].imageName}.png',
+                                  width: 50,
                                 ),
                               ),
                               SizedBox(height: 2),

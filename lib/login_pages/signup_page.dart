@@ -1,43 +1,32 @@
-import 'package:aiyo11/view/profile_page.dart';
-import 'package:aiyo11/view/register_page.dart';
+import 'package:aiyo11/home_pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:aiyo11/view/home_page.dart';
-import 'package:aiyo11/services/account.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:aiyo11/view/forget_password_page.dart';
-import 'package:icons_plus/icons_plus.dart';
-import 'package:aiyo/login/signup_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:aiyo11/login_pages/login_page.dart';
+import 'package:aiyo11/widget/theme.dart';
 import 'package:aiyo11/widget/custom_scaffold.dart';
-import '../widget/theme.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
-  final _formSignInKey = GlobalKey<FormState>();
-  bool rememberPassword = true;
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _formSignupKey = GlobalKey<FormState>();
+  bool agreePersonalData = true;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _store = FirebaseFirestore.instance;
+  int id = 0;
+  String name = '';
   String email = '';
   String password = '';
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      AccountServices.fetchAccounts();
-      User? user = _auth.currentUser;
-      if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MainPage()));
-      }
-    });
+  String birthday = '';
+  String gender = '';
+  double height = 0;
+  double weight = 0;
 
-  }
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -61,13 +50,15 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
               ),
               child: SingleChildScrollView(
+                // get started form
                 child: Form(
-                  key: _formSignInKey,
+                  key: _formSignupKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // get started text
                       Text(
-                        'Welcome back',
+                        'Get Started',
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.w900,
@@ -77,6 +68,41 @@ class _LogInScreenState extends State<LogInScreen> {
                       const SizedBox(
                         height: 40.0,
                       ),
+                      // full name
+                      TextFormField(
+                        onChanged: (value) {
+                          name = value;
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter Full name';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          label: const Text('Name'),
+                          hintText: 'Enter Name',
+                          hintStyle: const TextStyle(
+                            color: Colors.black26,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black12, // Default border color
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black12, // Default border color
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 25.0,
+                      ),
+                      // email
                       TextFormField(
                         onChanged: (value) {
                           email = value;
@@ -110,6 +136,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // password
                       TextFormField(
                         onChanged: (value) {
                           password = value;
@@ -145,43 +172,29 @@ class _LogInScreenState extends State<LogInScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // i agree to the processing
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: rememberPassword,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    rememberPassword = value!;
-                                  });
-                                },
-                                activeColor: lightColorScheme.primary,
-                              ),
-                              const Text(
-                                'Remember me',
-                                style: TextStyle(
-                                  color: Colors.black45,
-                                ),
-                              ),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ForgetPasswordScreen()),
-                              );
+                          Checkbox(
+                            value: agreePersonalData,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                agreePersonalData = value!;
+                              });
                             },
-                            child: Text(
-                              'Forget password?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: lightColorScheme.primary,
-                              ),
+                            activeColor: lightColorScheme.primary,
+                          ),
+                          const Text(
+                            'I agree to the processing of ',
+                            style: TextStyle(
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Text(
+                            'Personal data',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: lightColorScheme.primary,
                             ),
                           ),
                         ],
@@ -189,40 +202,65 @@ class _LogInScreenState extends State<LogInScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
+                      // signup button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formSignInKey.currentState!.validate() &&
-                                rememberPassword) {
+                          onPressed: () async {
+                            if (_formSignupKey.currentState!.validate() &&
+                                agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Processing Data'),
                                 ),
                               );
-                            } else if (!rememberPassword) {
+                            } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text(
                                         'Please agree to the processing of personal data')),
                               );
                             }
-                              _auth.signInWithEmailAndPassword(
-                                  email: email, password: password);
-
+                            await _auth.createUserWithEmailAndPassword(
+                                email: email, password: password);
+                            await _auth.signInWithEmailAndPassword(
+                                email: email, password: password);
+                            await _store.collection('users').doc(email).set({
+                              'name': name,
+                              'email': email,
+                              // 'birthday':birthday,
+                              // 'gender':gender,
+                              // 'height':height,
+                              // 'weight':weight,
+                              // 'id': id + 1,
+                            });
+                            // List<double> heights = [height];
+                            // List<double> weights = [weight];
+                            // await _store.collection('BMIs').doc(email).set({
+                            //   'height':heights,
+                            //   'weight':weights,
+                            //   'dates': Timestamp.fromDate(DateTime.now()),
+                            // });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (e) => Home(),
+                              ),
+                            );
                           },
-                          child: const Text('Login'),
+                          child: const Text('Sign up'),
                         ),
                       ),
                       const SizedBox(
-                        height: 25.0,
+                        height: 30.0,
                       ),
+                      // sign up divider
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Expanded(
                           //   child: Divider(
-                          //     //thickness: 0.7,
+                          //     thickness: 0.7,
                           //     color: Colors.grey.withOpacity(0.5),
                           //   ),
                           // ),
@@ -238,12 +276,11 @@ class _LogInScreenState extends State<LogInScreen> {
                         height: 5.0,
                       ),
 
-                      // don't have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'Don\'t have an account? ',
+                            'Already have an account? ',
                             style: TextStyle(
                               color: Colors.black45,
                             ),
@@ -253,12 +290,12 @@ class _LogInScreenState extends State<LogInScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (e) => const SignUpScreen(),
+                                  builder: (e) => const LogInPage(),
                                 ),
                               );
                             },
                             child: Text(
-                              'Sign up',
+                              'Login',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: lightColorScheme.primary,
@@ -281,4 +318,3 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 }
-

@@ -64,7 +64,7 @@ class _UserProfileState extends State<UserProfile> {
                     ClipOval(
                       child: _image == null
                           ? Image.asset(
-                        "images/user.png",
+                        "asset/images/user.png",
                         fit: BoxFit.cover,
                       )
                           : Image.file(

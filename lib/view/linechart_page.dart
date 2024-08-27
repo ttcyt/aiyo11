@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:aiyo11/component/bmi.dart';
-import 'package:aiyo11/view/home_page.dart';
+import 'package:aiyo11/home_pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:aiyo11/component/bmi_cards.dart';
@@ -253,7 +253,7 @@ class _LinechartPageState extends State<LinechartPage>
                 });
 
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainPage()));
+                    MaterialPageRoute(builder: (context) => Home()));
               },
               child: const Text(
                 'Save',
