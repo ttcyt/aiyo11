@@ -1,4 +1,4 @@
-import 'package:aiyo11/view/profile_page.dart';
+import 'package:aiyo11/home_pages/profile_page.dart';
 import 'package:aiyo11/view/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';

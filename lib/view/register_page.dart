@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:aiyo11/view/home_page.dart';
+import 'package:aiyo11/home_pages/home.dart';
+import 'package:aiyo11/component/bmi.dart';
+
+
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
@@ -14,8 +17,8 @@ class RegisterPage extends StatelessWidget {
   String password = '';
   String birthday = '';
   String gender = '';
-  int height = 0;
-  int weight = 0;
+  double height = 0;
+  double weight = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -39,21 +42,7 @@ class RegisterPage extends StatelessWidget {
                 name = value;
               },
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your name',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-              ),
+              decoration: decoration('enter your name'),
             ),
             const SizedBox(
               height: 15,
@@ -63,21 +52,7 @@ class RegisterPage extends StatelessWidget {
                 email = value;
               },
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your email',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-              ),
+              decoration: decoration('enter your email')
             ),
             const SizedBox(
               height: 15,
@@ -88,21 +63,7 @@ class RegisterPage extends StatelessWidget {
               },
               textAlign: TextAlign.center,
               obscureText: true,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your password',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-              ),
+              decoration: decoration('enter your password')
             ),
             const SizedBox(
               height: 15,
@@ -112,21 +73,7 @@ class RegisterPage extends StatelessWidget {
                 birthday = value;
               },
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your birthday',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-              ),
+              decoration: decoration('enter your birthday')
             ),
             const SizedBox(
               height: 15,
@@ -136,69 +83,27 @@ class RegisterPage extends StatelessWidget {
                 gender = value;
               },
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your gender',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-              ),
+              decoration: decoration('enter your gender'),
             ),
             const SizedBox(
               height: 15,
             ),
             TextField(
               onChanged: (value) {
-                height = int.parse(value);
+                height = double.parse(value);
               },
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your gender',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-              ),
+              decoration: decoration('input your height')
             ),
             const SizedBox(
               height: 15,
             ),
             TextField(
               onChanged: (value) {
-                weight = int.parse(value);
+                weight = double.parse(value);
               },
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
-                hintText: 'enter your gender',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-              ),
+              decoration: decoration('enter your gender')
             ),
             const SizedBox(
               height: 15,
@@ -207,7 +112,7 @@ class RegisterPage extends StatelessWidget {
               onPressed: () async {
                 await _auth.createUserWithEmailAndPassword(
                     email: email, password: password);
-                  final data = await _store.collection('users').doc(email).set({
+                  await _store.collection('users').doc(email).set({
                     'name': name,
                     'email': email,
                     'birthday':birthday,
@@ -215,7 +120,15 @@ class RegisterPage extends StatelessWidget {
                     'height':height,
                     'weight':weight,
                   });
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MainPage()));
+                  List<double> heights = [height];
+                  List<double> weights = [weight];
+                await _store.collection('BMIs').doc(email).set({
+                  'height':heights,
+                  'weight':weights,
+                  'dates': Timestamp.fromDate(DateTime.now()),
+                });
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
               },
               child: const Text('Signin'),
             ),
@@ -229,5 +142,23 @@ class RegisterPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  InputDecoration decoration( String hintText) {
+    return InputDecoration(
+              fillColor: Colors.white,
+              focusColor: Colors.white,
+              filled: true,
+              contentPadding: const EdgeInsets.only(top: 20, bottom: 20),
+              hintText: hintText,
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+                borderSide: const BorderSide(color: Colors.transparent),
+              ),
+            );
   }
 }
