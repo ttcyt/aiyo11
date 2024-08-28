@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({super.key});
-
+  CameraPage({super.key,required this.cameras});
+  List<CameraDescription> cameras;
   @override
   State<CameraPage> createState() => _CameraPageState();
 }
@@ -59,22 +59,12 @@ class _CameraPageState extends State<CameraPage> {
             CameraPreview(cameraController),
             GestureDetector(
                 onTap: () async {
-                  XFile? image =
-                      await imagePicker.pickImage(source: ImageSource.camera);
-                  setState(() {
-                    if (image != null) {
-                      path = image.path;
-                      print(path);
-                    }
-                  });
-                  File file = File(image!.path);
-                  await _store.ref('image/$id.png').putFile(File(file.path));
-                  id++;
-
+                  XFile picture = await cameraController.takePicture();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ImagePage(image: image!)));
+                          builder: (context) => ImagePage(image: picture)));
+
                 },
                 child: button(Icon(Icons.camera), Alignment.bottomCenter)),
           ],
@@ -105,10 +95,20 @@ Widget button(Icon icon, Alignment alignment) {
   );
 }
 
-// cameraController.takePicture().then((XFile? file) {
-//   if (mounted) {
-//     if (file != null) {
-//       print('file save to ${file.path}');
-//     }
+
+// XFile? image =
+//     await imagePicker.pickImage(source: ImageSource.camera);
+// setState(() {
+//   if (image != null) {
+//     path = image.path;
+//     print(path);
 //   }
 // });
+// File file = File(image!.path);
+// await _store.ref('image/$id.png').putFile(File(file.path));
+// id++;
+//
+// Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//         builder: (context) => ImagePage(image: image!)));
