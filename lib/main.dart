@@ -1,4 +1,3 @@
-import 'package:aiyo11/view/line_chart_page.dart';
 import 'package:aiyo11/home_pages/home.dart';
 import 'package:aiyo11/login_pages/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -46,27 +45,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//
-// import 'package:aiyo11/view/linechart_page.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:aiyo11/firebase_options.dart';
-// import 'package:flutter/material.dart';
-// import 'package:aiyo11/login_pages/login_page.dart';
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   runApp(const Aiyo());
-// }
-//
-// class Aiyo extends StatelessWidget {
-//   const Aiyo({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       home: LogInPage(),
-//     );
-//   }
-// }

@@ -1,8 +1,11 @@
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aiyo11/component/bmi.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class Account {
   int id;
@@ -24,6 +27,7 @@ class Account {
 
 class AccountServices {
   static final _firestore = FirebaseFirestore.instance;
+  static final _store = FirebaseStorage.instance;
   static String? email = _fetchEmail();
   static Map<String, dynamic> _account = {};
 
@@ -93,7 +97,22 @@ class AccountServices {
     String? email = auth.currentUser!.email;
     return email;
   }
+
   static void logOut() {
     FirebaseAuth.instance.signOut();
   }
+
+  Future<void> uploadUserPhoto(XFile file,String email) async{
+    await _store.ref('image/$email.png').putFile(File(file.path));
+  }
+
+  Future<Image?> getUserPhoto(String email) async{
+    late Image image;
+    await _store.ref('image/$email.png').getDownloadURL().then((value) {
+      image = Image.network(value);
+    });
+    return image;
+  }
+
+
 }

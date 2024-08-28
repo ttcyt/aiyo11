@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aiyo11/home_pages/profile_page.dart';
+
 class UserProfile extends StatefulWidget {
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -14,6 +15,7 @@ class _UserProfileState extends State<UserProfile> {
   XFile? _image;
   final ImagePicker _picker = ImagePicker();
   String? _imagePath;
+  final AccountServices accountServices = AccountServices();
 
   @override
   void initState() {
@@ -22,6 +24,12 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   Future<void> _loadImage() async {
+    Image? userPhoto =
+        await accountServices.getUserPhoto(AccountServices.email!);
+    if (userPhoto != null) {
+      _image = userPhoto as XFile;
+      setState(() {});
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _imagePath = prefs.getString('user_image');
@@ -40,6 +48,7 @@ class _UserProfileState extends State<UserProfile> {
         setState(() {
           _image = image;
         });
+        await accountServices.uploadUserPhoto(image, AccountServices.email!);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -66,13 +75,13 @@ class _UserProfileState extends State<UserProfile> {
                     ClipOval(
                       child: _image == null
                           ? Image.asset(
-                        "asset/images/user.png",
-                        fit: BoxFit.cover,
-                      )
+                              "asset/images/user.png",
+                              fit: BoxFit.cover,
+                            )
                           : Image.file(
-                        File(_image!.path),
-                        fit: BoxFit.cover,
-                      ),
+                              File(_image!.path),
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     Positioned(
                       right: 0,
@@ -107,10 +116,15 @@ class _UserProfileState extends State<UserProfile> {
                 children: [
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>ProfilePage(email: AccountServices.email!,)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage(
+                                      email: AccountServices.email!,
+                                    )));
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white, // 设置背景颜色
@@ -137,7 +151,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: TextButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
@@ -165,7 +179,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: TextButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
@@ -193,7 +207,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: TextButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
@@ -218,7 +232,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: TextButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
@@ -250,8 +264,10 @@ class _UserProfileState extends State<UserProfile> {
                     child: TextButton(
                       onPressed: () {
                         AccountServices.logOut();
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>const WelcomeScreen()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const WelcomeScreen()));
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xFF6563A5), // 设置背景颜色
