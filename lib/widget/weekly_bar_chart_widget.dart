@@ -70,18 +70,18 @@ class _WeeklyBarChartWidgetState extends State<WeeklyBarChartWidget> {
   FlTitlesData _buildAxes() {
     return FlTitlesData(
       show: true,
-      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      leftTitles: AxisTitles(
+      topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      leftTitles: const AxisTitles(
         sideTitles: SideTitles(showTitles: false),
       ),
-      rightTitles: AxisTitles(
+      rightTitles: const AxisTitles(
         sideTitles: SideTitles(showTitles: false),
       ),
       bottomTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (double value, TitleMeta meta) {
-            TextStyle style = TextStyle(
+            TextStyle style = const TextStyle(
               color: Colors.grey,
               fontWeight: FontWeight.bold,
               fontSize: 12,
@@ -115,8 +115,8 @@ class _WeeklyBarChartWidgetState extends State<WeeklyBarChartWidget> {
             }
             return SideTitleWidget(
               axisSide: meta.axisSide,
-              child: text,
               space: 5,
+              child: text,
             );
           },
         ),

@@ -136,6 +136,7 @@ class RegisterPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        // ignore: prefer_const_constructors
         child: Icon(Icons.arrow_back),
         onPressed: (){
           Navigator.pop(context);

@@ -6,7 +6,6 @@ import 'package:aiyo11/widget/alarm.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aiyo11/login_pages/welcome_page.dart';
 import 'package:aiyo11/widget/theme.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:aiyo11/firebase_options.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -19,10 +18,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
-  final AndroidInitializationSettings initializationSettingsAndroid =
+  const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings = InitializationSettings(
+  const  DarwinInitializationSettings initializationSettingsIOS =
+  DarwinInitializationSettings();
+  final InitializationSettings initializationSettings = const InitializationSettings(
     android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
   );
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
         //primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: OnboardingScreen(),
+      home: const OnboardingScreen(),
     );
   }
 }

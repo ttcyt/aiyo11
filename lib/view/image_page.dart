@@ -7,14 +7,13 @@ class ImagePage extends StatelessWidget {
   ImagePage({super.key, required this.image});
 
   XFile image;
-  final _store = FirebaseStorage.instance;
   int id = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SHOW IMAGE'),
+        title: const Text('SHOW IMAGE'),
       ),
       body: Center(
         child: Column(
@@ -28,7 +27,7 @@ class ImagePage extends StatelessWidget {
           // await _store.ref('image/$id.png').putFile(File(image.path));
           // id++;
         },
-        child: Icon(Icons.save),
+        child: const Icon(Icons.save),
       ),
     );
   }

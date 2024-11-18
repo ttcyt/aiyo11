@@ -2,6 +2,9 @@ import 'package:aiyo11/home_pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiyo11/services/account.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart';
 
 const Color textColor = Color(0xFF6563A5);
 
@@ -15,25 +18,30 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final _firestore = FirebaseFirestore.instance;
+  AccountServices accountServices = AccountServices();
   String changedName = '';
   String changedEmail = '';
   String changedBirthday = '';
-  double changedHeight = 0;
-  double changedWeight = 0;
+  int changedHeight = 0;
+  int changedWeight = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    AccountServices.fetchAccounts();
+    getAccount();
+  }
+  Future<void> getAccount()async{
+    await accountServices.fetchAccounts();
     setState(() {
-      changedName = AccountServices.account['name'];
-      changedEmail = AccountServices.account['email'];
-      changedBirthday = AccountServices.account['birthday'];
-      changedHeight = AccountServices.account['height'];
-      changedWeight = AccountServices.account['weight'];
+      changedName = accountServices.account['name'];
+      changedEmail = accountServices.account['email'];
+      changedBirthday = accountServices.account['birthday'];
+      changedHeight = accountServices.account['height'];
+      changedWeight = accountServices.account['weight'] ;
+      print(accountServices.account);
     });
+
   }
 
   @override
@@ -65,8 +73,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   fillColor: Colors.white,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  hintText: AccountServices.account['name'],
-                  hintStyle: TextStyle(color: textColor),
+                  hintText: accountServices.account['name'],
+                  hintStyle: const TextStyle(color: textColor),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(8),
@@ -95,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fillColor: Colors.white,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  hintText: AccountServices.account['email'],
+                  hintText: accountServices.account['email'],
                   hintStyle: const TextStyle(color: textColor),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
@@ -122,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fillColor: Colors.white,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  hintText: AccountServices.account['birthday'],
+                  hintText: accountServices.account['birthday'],
                   hintStyle: const TextStyle(color: textColor),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
@@ -139,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               TextField(
                 onChanged: (value) {
-                  changedHeight = double.parse(value);
+                  changedHeight = value as int;
                 },
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
@@ -150,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fillColor: Colors.white,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  hintText: AccountServices.account['height'].toString(),
+                  hintText: accountServices.account['height'].toString(),
                   hintStyle: const TextStyle(color: textColor),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
@@ -167,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               TextField(
                 onChanged: (value) {
-                  changedWeight = double.parse(value);
+                  changedWeight = value as int;
                 },
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
@@ -179,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fillColor: Colors.white,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  hintText: AccountServices.account['weight'].toString(),
+                  hintText: accountServices.account['weight'].toString(),
                   hintStyle: const TextStyle(color: textColor),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.transparent),
@@ -196,8 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               TextButton(
                   onPressed: () {
-                    final data =
-                        _firestore.collection('users').doc(widget.email);
+                    final data = AccountServices.firestore.collection('users').doc(widget.email);
                     data.update({
                       'name': changedName,
                       'email': changedEmail,

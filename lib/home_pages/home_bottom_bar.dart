@@ -1,8 +1,11 @@
+import 'package:aiyo11/view/linechart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aiyo11/home_pages/home.dart';
 import 'package:aiyo11/home_pages/plan.dart';
 import 'package:aiyo11/home_pages/user_profile.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:aiyo11/home_pages/testPlan.dart';
+import 'package:aiyo11/services/account.dart';
 
 
 class HomeBottomBar extends StatefulWidget {
@@ -27,12 +30,12 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageStorage(
-        child: currentPages,
         bucket: bucket,
+        child: currentPages,
       ),
-      backgroundColor: Color(0xFF6563A5),
+      backgroundColor: const Color(0xFF6563A5),
       floatingActionButton: Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: const EdgeInsets.only(top: 30),
         child: FloatingActionButton(
           onPressed: () {
             setState(() {
@@ -40,12 +43,12 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
               currentTab = 0;
             });
           },
-          backgroundColor: Color(0xFFBDB5DA),
-          child: Icon(
+          backgroundColor: const Color(0xFFBDB5DA),
+          shape: const CircleBorder(),
+          child: const Icon(
             Icons.home,
             color: Colors.white,
           ),
-          shape: CircleBorder(),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -72,13 +75,13 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                         Icon(
                           Icons.person,
                           color:
-                          currentTab == 1 ? Color(0xFF6563A5) : Colors.grey,
+                          currentTab == 1 ? const Color(0xFF6563A5) : Colors.grey,
                         ),
                         Text(
                           'Profile',
                           style: TextStyle(
                               color: currentTab == 1
-                                  ? Color(0xFF6563A5)
+                                  ? const Color(0xFF6563A5)
                                   : Colors.grey),
                         )
                       ],
@@ -103,13 +106,13 @@ class _HomeBottomBarState extends State<HomeBottomBar> {
                         Icon(
                           Icons.my_library_books,
                           color:
-                          currentTab == 2 ? Color(0xFF6563A5) : Colors.grey,
+                          currentTab == 2 ? const Color(0xFF6563A5) : Colors.grey,
                         ),
                         Text(
                           'Health',
                           style: TextStyle(
                               color: currentTab == 2
-                                  ? Color(0xFF6563A5)
+                                  ? const Color(0xFF6563A5)
                                   : Colors.grey),
                         )
                       ],

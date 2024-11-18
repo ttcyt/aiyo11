@@ -15,21 +15,22 @@ class _UserProfileState extends State<UserProfile> {
   XFile? _image;
   final ImagePicker _picker = ImagePicker();
   String? _imagePath;
-  final AccountServices accountServices = AccountServices();
+  AccountServices accountServices = AccountServices();
 
   @override
   void initState() {
     super.initState();
     _loadImage();
+    print(accountServices.email);
+    accountServices.fetchAccounts();
   }
 
   Future<void> _loadImage() async {
-    Image? userPhoto =
-        await accountServices.getUserPhoto(AccountServices.email!);
-    if (userPhoto != null) {
-      _image = userPhoto as XFile;
-      setState(() {});
-    }
+    XFile userPhoto =
+        await accountServices.getUserPhoto(XFile('asset/images/user.png'));
+    setState(() {
+      _image = userPhoto;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _imagePath = prefs.getString('user_image');
@@ -48,7 +49,7 @@ class _UserProfileState extends State<UserProfile> {
         setState(() {
           _image = image;
         });
-        await accountServices.uploadUserPhoto(image, AccountServices.email!);
+        await accountServices.uploadUserPhoto(image);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -123,7 +124,7 @@ class _UserProfileState extends State<UserProfile> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ProfilePage(
-                                      email: AccountServices.email!,
+                                      email: accountServices.email!,
                                     )));
                       },
                       style: TextButton.styleFrom(
@@ -263,7 +264,7 @@ class _UserProfileState extends State<UserProfile> {
                         horizontal: 130, vertical: 5),
                     child: TextButton(
                       onPressed: () {
-                        AccountServices.logOut();
+                        accountServices.logOut();
                         Navigator.push(
                             context,
                             MaterialPageRoute(

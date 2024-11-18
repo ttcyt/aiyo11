@@ -20,8 +20,8 @@ class _AlarmState extends State<Alarm> {
   @override
   void initState() {
     super.initState();
-    final InitializationSettings initializationSettings =
-    const InitializationSettings(
+    const InitializationSettings initializationSettings =
+    InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
     );
 

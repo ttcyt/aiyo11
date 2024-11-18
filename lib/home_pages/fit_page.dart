@@ -1,6 +1,9 @@
+import 'package:aiyo11/view/camera_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aiyo11/home_pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:camera/camera.dart';
+import 'package:aiyo11/component/yoga_pose.dart';
 
 class FitPage extends StatefulWidget {
   final String img;
@@ -14,9 +17,12 @@ class FitPage extends StatefulWidget {
 
 class _FitPageState extends State<FitPage> {
   bool isFavorite = false;
+  int exerciseType = 0;
+
   void initState() {
     super.initState();
     _loadFavoriteStatus();
+    exerciseType = yogaPoses.indexOf(widget.yogaPose);
   }
 
   // 加載愛心狀態
@@ -46,19 +52,19 @@ class _FitPageState extends State<FitPage> {
         centerTitle: true,
         title: Text(
           widget.yogaPose.cname,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             letterSpacing: 1,
           ),
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 size: 28,
-                color: Color(0xFF6563A5),
+                color: const Color(0xFF6563A5),
               ),
               onPressed: _toggleFavorite,
               // onPressed: () {
@@ -72,16 +78,16 @@ class _FitPageState extends State<FitPage> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: ListView(
           children: [
             Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               width: MediaQuery.of(context).size.width,
               height: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Color(0xFFF5F3FF),
+                color: const Color(0xFFF5F3FF),
                 image: DecorationImage(
                   image: AssetImage('images/${widget.yogaPose.imageName}.png'),
                 ),
@@ -93,11 +99,11 @@ class _FitPageState extends State<FitPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(10),
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(10),
                     elevation: 0,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.play_arrow_rounded,
                     color: Color(0xFF6563A5),
                     size: 40,
@@ -105,17 +111,17 @@ class _FitPageState extends State<FitPage> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Text(
               widget.yogaPose.cname,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
@@ -126,46 +132,57 @@ class _FitPageState extends State<FitPage> {
                 color: Colors.black.withOpacity(0.7),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Row(children: [
-              Icon(
+              const Icon(
                 Icons.star,
                 color: Colors.amber,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               Text(
                 widget.yogaPose.rating,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ]),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               decoration: BoxDecoration(
-                color: Color(0xFFF5F3FF),
+                color: const Color(0xFFF5F3FF),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Material(
-                    color: Color(0xFF6563A5),
+                    color: const Color(0xFF6563A5),
                     borderRadius: BorderRadius.circular(10),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        List<CameraDescription> cameras =
+                            await availableCameras();
+                        if (cameras.isNotEmpty) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CameraPage(cameras: cameras, pose:exerciseType),
+                            ),
+                          );
+                        }
+                      },
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 35),
-                        child: Text(
+                            const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+                        child: const Text(
                           "Start",
                           style: TextStyle(
                             color: Colors.white,
@@ -179,7 +196,7 @@ class _FitPageState extends State<FitPage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(

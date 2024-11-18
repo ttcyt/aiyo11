@@ -28,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   double height = 0;
   double weight = 0;
 
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -229,19 +230,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             await _store.collection('users').doc(email).set({
                               'name': name,
                               'email': email,
-                              // 'birthday':birthday,
-                              // 'gender':gender,
-                              // 'height':height,
-                              // 'weight':weight,
-                              // 'id': id + 1,
+                              'birthday':birthday,
+                              'gender':gender,
+                              'height':height,
+                              'weight':weight,
+                              'id': id + 1,
                             });
-                            // List<double> heights = [height];
-                            // List<double> weights = [weight];
-                            // await _store.collection('BMIs').doc(email).set({
-                            //   'height':heights,
-                            //   'weight':weights,
-                            //   'dates': Timestamp.fromDate(DateTime.now()),
-                            // });
+                            List<double> heights = [height];
+                            List<double> weights = [weight];
+                            List<Timestamp> dates =  [];
+                            dates.add(Timestamp.fromDate(DateTime.now()));
+                            await _store.collection('BMIs').doc(email).set({
+                              'heights':heights,
+                              'weights':weights,
+                              'dates': dates,
+                            });
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -256,7 +259,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 30.0,
                       ),
                       // sign up divider
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Expanded(
@@ -265,7 +268,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           //     color: Colors.grey.withOpacity(0.5),
                           //   ),
                           // ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.symmetric(
                               vertical: 0,
                               horizontal: 10,

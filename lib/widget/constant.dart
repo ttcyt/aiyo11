@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+enum Poses {treePose, trianglePose, godOFWarPose, camelPose, downwardFacingDogPose, boatPose}
 class CustomColors {
   static const kLightPinkColor = Color(0xffF3BBEC);
   static const kYellowColor = Color(0xffF3AA26);

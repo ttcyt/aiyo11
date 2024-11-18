@@ -7,6 +7,8 @@ import 'package:aiyo11/login_pages/forget_password_page.dart';
 import 'package:aiyo11/login_pages/signup_page.dart';
 import 'package:aiyo11/widget/custom_scaffold.dart';
 import 'package:aiyo11/widget/theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -20,21 +22,22 @@ class _LogInPageState extends State<LogInPage> {
   bool rememberPassword = true;
   String email = '';
   String password = '';
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  AccountServices accountServices = AccountServices();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      AccountServices.fetchAccounts();
-      User? user = _auth.currentUser;
+      accountServices.fetchAccounts();
+      User? user = AccountServices.auth.currentUser;
       if (user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomeBottomBar()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeBottomBar()));
       }
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -189,7 +192,7 @@ class _LogInPageState extends State<LogInPage> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () async{
+                          onPressed: () async {
                             if (_formSignInKey.currentState!.validate() &&
                                 rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -204,10 +207,13 @@ class _LogInPageState extends State<LogInPage> {
                                         'Please agree to the processing of personal data')),
                               );
                             }
-                              await _auth.signInWithEmailAndPassword(
-                                  email: email, password: password);
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=>const HomeBottomBar()));
-
+                            await AccountServices.auth.signInWithEmailAndPassword(
+                                email: email, password: password);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HomeBottomBar()));
                           },
                           child: const Text('Login'),
                         ),
@@ -279,4 +285,3 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 }
-

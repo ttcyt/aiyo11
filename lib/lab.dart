@@ -1,4 +1,5 @@
 import 'package:aiyo11/view/camera_page.dart';
+import 'package:aiyo11/view/linechart_page.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:aiyo11/firebase_options.dart';
@@ -41,14 +42,12 @@ class NavigateButton extends StatelessWidget {
         if (cameras.isNotEmpty) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => CameraPage(
-                cameras: cameras,
-              ),
+              builder: (context) => LineChartPage(email:"ttcyt1029@gmail.com")
             ),
           );
         }
       },
-      child: Text('Navigate to Camera Page'),
+      child: const Text('Navigate to Camera Page'),
     );
   }
 }

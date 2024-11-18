@@ -16,12 +16,12 @@ import 'package:aiyo11/services/exercise.dart';
 import 'package:aiyo11/widget/chart_title_widgets.dart';
 import 'package:lottie/lottie.dart';
 
-class Plan extends StatefulWidget {
+class TextPlan extends StatefulWidget {
   @override
-  _PlanState createState() => _PlanState();
+  _TextPlanState createState() => _TextPlanState();
 }
 
-class _PlanState extends State<Plan> with TickerProviderStateMixin {
+class _TextPlanState extends State<TextPlan> with TickerProviderStateMixin {
   AccountServices accountServices = AccountServices();
   DateTime selectedDate = DateTime.now(); // 当前选择的日期
   List<int> weeklyData = [
@@ -46,30 +46,12 @@ class _PlanState extends State<Plan> with TickerProviderStateMixin {
   List<Timestamp> dates = [];
   List<int> ids = [];
   List<FlSpot> flspots = [];
-  List<double> bmis = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-    );
-    init(DateTime.now());
-    updateBMIs();
-
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
 
   Future<void> updateBMIs() async {
     await accountServices.fetchAccounts();
     print('${accountServices.bmiDatas}   bmidatas');
+
+
     BMIs = await accountServices.takeBMIs();
     flspots = await accountServices.takeSpot();
     id = accountServices.heights.length;
@@ -77,6 +59,18 @@ class _PlanState extends State<Plan> with TickerProviderStateMixin {
     setState(() {});
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    updateBMIs();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
   Future<void> init(DateTime datetime) async {
     await exerciseTimeStorage.getData();
     exerciseTimes =
@@ -218,44 +212,6 @@ class _PlanState extends State<Plan> with TickerProviderStateMixin {
                           },
                         ),
                       ),
-                      Row(
-                        children: [IconButton(
-                            onPressed: () {
-                              id++;
-                              BMIs.add(
-                                BMI(
-                                  id: id,
-                                  date: DateTime.now(),
-                                  height: 160,
-                                  weight: 55,
-                                ),
-                              );
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.add),),
-                        TextButton(onPressed: (){
-                          for (BMI bmi in BMIs) {
-                            heights.add(bmi.height);
-                            weights.add(bmi.weight);
-                            dates.add(Timestamp.fromDate(bmi.date));
-                            bmis.add(bmi.calculateBmi());
-                            ids.add(bmi.id);
-                          }
-                          print(heights[0]);
-                          final data =
-                          AccountServices.firestore.collection('BMIs').doc('${AccountServices().email}');
-                          data.set({
-                            'heights': heights,
-                            'weights': weights,
-                            'dates': dates,
-                            'ids': ids,
-                          });
-
-
-
-                        }, child: Text('SAVE'))],
-                      ),
-
                     ],
                   ),
                 ),

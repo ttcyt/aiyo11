@@ -4,66 +4,45 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aiyo11/component/bmi.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'dart:io';
 
-class Account {
-  int id;
-  String name;
-  String email;
-  String gender;
-  double height;
-  double weight;
 
-  Account({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.weight,
-    required this.height,
-    required this.gender,
-  });
-}
 
 class AccountServices {
-  static final _firestore = FirebaseFirestore.instance;
-  static final _store = FirebaseStorage.instance;
-  static String? email = _fetchEmail();
-  static Map<String, dynamic> _account = {};
+  static final firestore = FirebaseFirestore.instance;
+  static final store = FirebaseStorage.instance;
+  static final auth = FirebaseAuth.instance;
 
-  static Map<String, dynamic> get account => _account;
-  static Map<String, dynamic> _bmiDatas = {};
 
-  static Map<String, dynamic> get bmiDatas => _bmiDatas;
-  static List<dynamic> heights = [];
-  static List<dynamic> weights = [];
-  static List<dynamic> dates = [];
-  static List<dynamic> ids = [];
-  static List<BMI> bmis = [];
+  String? get email => auth.currentUser?.email;
+  Map<String, dynamic> _account = {};
+  Map<String, dynamic> _bmiDatas = {};
+  List<dynamic> heights = [];
+  List<dynamic> weights = [];
+  List<dynamic> dates = [];
+  List<dynamic> ids = [];
+  List<BMI> bmis = [];
 
-  static Future<void> fetchAccounts() async {
-    dynamic source = await _firestore.collection('users').doc(email).get();
-    dynamic data = source.data();
-    _account = data;
-    print(email);
-    print(_account['name']);
+  Map<String, dynamic> get account => _account;
+  Map<String, dynamic> get bmiDatas => _bmiDatas;
 
-    dynamic bmiSource = await _firestore.collection('BMIs').doc(email).get();
-    dynamic bmiData = bmiSource.data();
-    _bmiDatas = bmiData;
-    // heights.clear();
-    // weights.clear();
-    // dates.clear();
-    // bmis.clear();
-    // ids.clear();
+  Future<void> fetchAccounts() async {
+    if (email == null) return;
+    final userDoc = await firestore.collection('users').doc(email).get();
+    _account = userDoc.data() ?? {};
 
-    heights = _bmiDatas['heights'];
-    weights = _bmiDatas['weights'];
-    dates = _bmiDatas['dates'];
-    ids = _bmiDatas['ids'];
+    final bmiDoc = await firestore.collection('BMIs').doc(email).get();
+    _bmiDatas = bmiDoc.data() ?? {};
+
+    heights = _bmiDatas['heights']?? [] ;
+    weights = _bmiDatas['weights'] ?? [] ;
+    dates = _bmiDatas['dates'] ?? [] ;
+    ids = _bmiDatas['ids'] ?? [];
+    print(_account);
+    print(_bmiDatas);
   }
 
-  static List<BMI> takeBMIs() {
+  List<BMI> takeBMIs() {
     bmis.clear();
     for (int i = 0; i < heights.length; i++) {
       bmis.add(
@@ -78,41 +57,32 @@ class AccountServices {
     return bmis;
   }
 
-  static List<FlSpot> takeSpot() {
-    List<FlSpot> flspots = [];
-    for (BMI bmi in bmis) {
-      int month = bmi.date.month;
-      print(month);
-      int day = bmi.date.day;
-      double x = month + (day / 31) - 1;
-      double y = double.parse(bmi.calculateBmi().toStringAsFixed(2));
-      flspots.add(FlSpot(x, y));
-    }
-
-    return flspots;
+  List<FlSpot> takeSpot() {
+    return bmis.map((bmi) {
+      final month = bmi.date.month;
+      final day = bmi.date.day;
+      final x = month + (day / 31) - 1;
+      final y = double.parse(bmi.calculateBmi().toStringAsFixed(2));
+      return FlSpot(x, y);
+    }).toList();
   }
 
-  static String? _fetchEmail() {
-    final auth = FirebaseAuth.instance;
-    String? email = auth.currentUser!.email;
-    return email;
+  Future<void> uploadUserPhoto(XFile file) async {
+    if (email == null) return;
+    print(email);
+    await store.ref('image/$email.png').putFile(File(file.path));
   }
 
-  static void logOut() {
-    FirebaseAuth.instance.signOut();
+  Future<XFile> getUserPhoto(XFile dePhoto) async {
+    if (email == null) return dePhoto;
+    final data = await store.ref('image/$email.png').getData();
+    return data != null ? XFile.fromData(data) : dePhoto;
   }
-
-  Future<void> uploadUserPhoto(XFile file,String email) async{
-    await _store.ref('image/$email.png').putFile(File(file.path));
+  void signIn(String email, String password){
+    auth.signInWithEmailAndPassword(email: email, password: password);
   }
-
-  Future<Image?> getUserPhoto(String email) async{
-    late Image image;
-    await _store.ref('image/$email.png').getDownloadURL().then((value) {
-      image = Image.network(value);
-    });
-    return image;
+  void logOut() {
+    auth.signOut();
   }
-
 
 }

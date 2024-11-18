@@ -1,30 +1,47 @@
-import 'dart:io';
+import 'package:aiyo11/services/account.dart';
+import 'package:aiyo11/services/exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:aiyo11/view/image_page.dart';
-import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:aiyo11/services/timer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CameraPage extends StatefulWidget {
-  CameraPage({super.key,required this.cameras});
+  CameraPage({super.key,required this.cameras, required this.pose});
   List<CameraDescription> cameras;
+  int pose;
+
   @override
   State<CameraPage> createState() => _CameraPageState();
 }
 
 class _CameraPageState extends State<CameraPage> {
+  final AccountServices accountService = AccountServices();
+  ExerciseTimeStorage exerciseTimeStorage = ExerciseTimeStorage(email: AccountServices().email!);
   List<CameraDescription> cameras = [];
   late CameraController cameraController;
   final ImagePicker imagePicker = ImagePicker();
-  final _store = FirebaseStorage.instance;
   String path = '';
   int id = 10;
+  TimerService timerService = TimerService();
+  bool isStart = false;
+  List<int> exerciseTimes = [];
+
 
   @override
   void initState() {
-    startCamera();
     super.initState();
+    init();
+    // print(exerciseTimes);
+    startCamera();
+
+  }
+
+  Future<void> init() async {
+    await exerciseTimeStorage.getData();
+    exerciseTimes = exerciseTimeStorage.fetchExerciseTime(DateTime.now());
   }
 
   void startCamera() async {
@@ -60,18 +77,37 @@ class _CameraPageState extends State<CameraPage> {
             GestureDetector(
                 onTap: () async {
                   XFile picture = await cameraController.takePicture();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ImagePage(image: picture)));
+                  if(isStart == false) {
+                    init();
+                    print('========');
+                    isStart = true;
+                    print(exerciseTimes);
+                    setState(() {
 
-                },
-                child: button(Icon(Icons.camera), Alignment.bottomCenter)),
+                    });
+                  }else{
+                    isStart = false;
+                    int exerciseTime = timerService.getElapsedTime();
+                    exerciseTimes[widget.pose] += exerciseTime;
+                    exerciseTimeStorage.saveExerciseTime(exerciseTimes);
+                    timerService.reset();
+                    setState(() {
+
+                    });
+                  } },
+                child: isStart? button(const Icon(Icons.stop), Alignment.bottomCenter):
+                button(const Icon(Icons.not_started_outlined), Alignment.bottomCenter)
+            ),
+            Column(
+              children: [
+                Text('${timerService.getElapsedTime()}')
+              ],
+            )
           ],
         ),
       );
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 }
@@ -86,7 +122,7 @@ Widget button(Icon icon, Alignment alignment) {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(50),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 10),
         ],
       ),
