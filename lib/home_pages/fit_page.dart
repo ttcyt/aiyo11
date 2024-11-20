@@ -1,4 +1,4 @@
-import 'package:aiyo11/view/camera_page.dart';
+import 'package:aiyo11/home_pages/camera_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aiyo11/home_pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -174,7 +174,7 @@ class _FitPageState extends State<FitPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) =>
-                                  CameraPage(cameras: cameras, pose:exerciseType),
+                                  CameraPage(pose:exerciseType),
                             ),
                           );
                         }

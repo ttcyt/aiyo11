@@ -1,5 +1,3 @@
-import 'package:aiyo11/view/linechart_page.dart';
-import 'package:aiyo11/widget/safe_offset.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:aiyo11/widget/constant.dart';
@@ -9,12 +7,13 @@ import 'package:aiyo11/widget/weekly_bar_chart_widget.dart';
 import 'dart:async';
 import 'package:aiyo11/component/bmi.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:aiyo11/component/bmi_cards.dart';
+import 'package:aiyo11/widget/bmi_cards.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiyo11/services/account.dart';
 import 'package:aiyo11/services/exercise.dart';
-import 'package:aiyo11/widget/chart_title_widgets.dart';
 import 'package:lottie/lottie.dart';
+
+import '../widget/linechart_page.dart';
 
 class Plan extends StatefulWidget {
   @override

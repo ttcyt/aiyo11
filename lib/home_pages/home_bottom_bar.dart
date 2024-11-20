@@ -1,11 +1,8 @@
-import 'package:aiyo11/view/linechart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aiyo11/home_pages/home.dart';
 import 'package:aiyo11/home_pages/plan.dart';
 import 'package:aiyo11/home_pages/user_profile.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:aiyo11/home_pages/testPlan.dart';
-import 'package:aiyo11/services/account.dart';
 
 
 class HomeBottomBar extends StatefulWidget {

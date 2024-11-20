@@ -5,7 +5,6 @@ const TextStyle styleSmall = TextStyle(
 );
 class BMIcard extends StatefulWidget {
 
-
   BMIcard({
     super.key,
     required this.date,
