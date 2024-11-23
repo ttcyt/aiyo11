@@ -48,6 +48,7 @@ class _CameraPageState extends State<CameraPage> {
   Future<void> init() async {
     await exerciseTimeStorage.getData();
     exerciseTimes = exerciseTimeStorage.fetchExerciseTime(DateTime.now());
+    timerService.reset();
   }
 
   Future<void> _checkPermissions() async {
@@ -75,7 +76,7 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> _connectToServer() async {
     try {
-      _socket = await Socket.connect('192.168.0.11', 12345); // 替換為伺服器的IP和端口
+      _socket = await Socket.connect('192.168.50.143', 12345); // 替換為伺服器的IP和端口
       setState(() {
         isSocketConnected = true;
         connectionMessage = 'Connected to server'; // 更新連接訊息
@@ -198,60 +199,54 @@ class _CameraPageState extends State<CameraPage> {
                 ? Center(child: CircularProgressIndicator())
                 : CameraPreview(_controller!),
           ),
+
+          // Positioned 圓框，顯示 connectionMessage 或 serverMessage
           Positioned(
-            top: 20, // 距離螢幕上方 20 個像素
+            top: 20,  // 距離螢幕上方 20 個像素
             left: 20,
             right: 20,
             child: Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Color(0xFFBDB5BA), // 背景顏色
-                borderRadius: BorderRadius.circular(30), // 圓角邊框
+                color: Color(0xFFBDB5BA),  // 背景顏色
+                borderRadius: BorderRadius.circular(30),  // 圓角邊框
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 3,
                     blurRadius: 7,
-                    offset: Offset(0, 3), // 陰影效果
+                    offset: Offset(0, 3),  // 陰影效果
                   ),
                 ],
               ),
               child: Text(
                 connectionMessage.isNotEmpty
                     ? connectionMessage // 如果有連接訊息，顯示該訊息
-                    : ' $serverMessage', // 否則顯示來自伺服器的訊息
-                textAlign: TextAlign.center, // 文字居中顯示
+                    : ' $serverMessage',  // 否則顯示來自伺服器的訊息
+                textAlign: TextAlign.center,  // 文字居中顯示
                 style: TextStyle(
-                  fontSize: 16, // 文字大小
-                  color: Color(0xFF6563A5), // 使用色碼設定 Server Message 字體顏色
+                  fontSize: 16,             // 文字大小
+                  color: Color(0xFF6563A5),  // 使用色碼設定 Server Message 字體顏色
                 ),
               ),
             ),
           ),
-          GestureDetector(
-              onTap: () async {
-                if (isStart == false) {
-                  init();
-                  print('========');
-                  isStart = true;
-                  print(exerciseTimes);
-                  setState(() {});
-                } else {
-                  isStart = false;
-                  int exerciseTime = timerService.getElapsedTime();
-                  exerciseTimes[widget.pose] += exerciseTime;
-                  exerciseTimeStorage.saveExerciseTime(exerciseTimes);
-                  timerService.reset();
-                  setState(() {});
-                }
-              },
-              child: isStart
-                  ? button(const Icon(Icons.lock_clock), Alignment.bottomCenter)
-                  : button(const Icon(Icons.not_started_outlined),
-                      Alignment.bottomCenter)),
-          Column(
-            children: [Text('${timerService.getElapsedTime()}')],
-          )
+          // GestureDetector(
+          //     onTap: () async {
+          //         isStart = false;
+          //         int exerciseTime = timerService.getElapsedTime();
+          //         exerciseTimes[widget.pose] += exerciseTime;
+          //         exerciseTimeStorage.saveExerciseTime(exerciseTimes);
+          //         timerService.reset();
+          //         setState(() {});
+          //     },
+          //     child: isStart
+          //         ? button(const Icon(Icons.lock_clock), Alignment.bottomCenter)
+          //         : button(const Icon(Icons.not_started_outlined),
+          //             Alignment.bottomCenter)),
+          // Column(
+          //   children: [Text('${timerService.getElapsedTime()}')],
+          // )
         ],
       ),
     );
@@ -261,6 +256,11 @@ class _CameraPageState extends State<CameraPage> {
   void dispose() {
     _controller?.dispose();
     _socket?.close();
+    int exerciseTime = timerService.getElapsedTime();
+    exerciseTimes[widget.pose] += exerciseTime;
+    exerciseTimeStorage.saveExerciseTime(exerciseTimes);
+    timerService.reset();
+
     super.dispose();
   }
 }

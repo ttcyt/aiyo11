@@ -8,10 +8,4 @@ class TimerService{
   reset(){
       startTime = DateTime.now() ;
   }
-
-
-
-
-
-
 }
